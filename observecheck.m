@@ -2,12 +2,12 @@
 
 Oac = obsv(A, C);
 
-if (rank(Oac) == size(A, 2))
+if (rank(Oac) == length(A))
     
-    fprintf('Equilibrium Point "%s" is Completely Observable \n', EP);
+    fprintf('Equilibrium Point "%s" is Completely Observable \n\n', EP);
     
 else
     
-    fprintf('Equilibrium Point "%s" is NOT Completely Observable \n', EP);
+    fprintf('Equilibrium Point "%s" is NOT Completely Observable \n\n', EP);
     
 end

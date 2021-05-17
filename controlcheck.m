@@ -2,7 +2,7 @@
 
 Cab = ctrb(A, B);
 
-if (rank(Cab) == size(A, 2))
+if (rank(Cab) == length(A))
     
     fprintf('Equilibrium Point "%s" is Completely Controllable \n\n', EP);
     

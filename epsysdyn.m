@@ -71,7 +71,7 @@ elseif EP == "b"
 % invalid EP
 else
     
-    disp("invalid EP. Please enter 'a' or 'b' only.");
+    disp("invalid EP. please enter 'a' or 'b' only.");
     return
     
 end

@@ -1,6 +1,6 @@
 %% EGH445 Stability Check
 
-% lyapunov's "indirect" method criterion for non-linear systems
+% lyapunov's "indirect" method criterion for non-linear systems'
 % stability checking
 lambda = eig(A);
 
@@ -10,7 +10,7 @@ if (sum(lambda > 0) >= 1)
     
 elseif (sum(lambda == 0) >= 1)
     
-    fprintf('Equilibrium Point "%s" Lyapunov''s "Indirect" Method Inconclusive \n\n', EP);
+    fprintf('Equilibrium Point "%s" is Lyapunov''s "Indirect" Method Inconclusive \n\n', EP);
     
 else
     

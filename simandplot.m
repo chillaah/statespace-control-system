@@ -1,11 +1,11 @@
 %% EGH445 Simulation & Plotting
 
-% simulink model and ode solver parameters
-h = 0.02; 
-stoptime = 10;
-
-NL = sim('TORANonlinear', 'Solver', 'ode4', 'FixedStep', 'h', 'StopTime', 'stoptime');
+% simulink simulation
 Lin = sim('TORALinearized', 'Solver', 'ode4', 'FixedStep', 'h', 'StopTime', 'stoptime');
+NL = sim('TORANonlinear', 'Solver', 'ode4', 'FixedStep', 'h', 'StopTime', 'stoptime');
+
+
+% plotting
 figure();
 NL_data = [NL.x, NL.T];
 L_data = [Lin.x, Lin.T];
@@ -40,8 +40,7 @@ for ii = 1:4
            'Location', 'east');
 end
 
-
-% input torque
+% input torque plot
 subplot(5,1,5);
 plot(NL.t,NL.T,'b-',Lin.t,Lin.T,'r--', 'LineWidth', 1);
 grid on

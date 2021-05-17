@@ -1,5 +1,6 @@
 %% EGH445 Written Report Assignment
 close all; clear; clc
+format bank;
 
 % get initial values
 initialise;
@@ -39,17 +40,19 @@ ndpl1 = 10;
 ndpl2 = 10;
 
 % normal controller gains 'K'
+% outputs control gains Knormal
 knormal;
 
 % lqr controller gains 'K'
 % penalising states and control input
-Qs1 = 1; % RA Angle
-Qs2 = 1; % RA Angular Velocity
-Qs3 = 1; % TO Position
-Qs4 = 1; % TO Linear Velocity
+Qs1 = 1e3; % RA Angle
+Qs2 = 1e2; % RA Angular Velocity
+Qs3 = 1e6; % TO Position
+Qs4 = 1e4; % TO Linear Velocity
 Ru = 1; % Input Torque
 
 % linear quadratic controller gains 'K'
+% outputs control gains Klqr
 klqr;
 
 % state feedback controller : u = -K * x(t)
@@ -63,28 +66,55 @@ CLpoles = eig(newsys);
 % Cart_Pendulum_Animation(NL.t,NL.x1,NL.x2,x_bar(1),x_bar(2))
 
 % RA Angular Velocity & TO Linear Velocity cannot be observed
-% Assigning output vector to RA Angle & TO Position
+% Assigning output matrix to be only RA Angle & TO Position
 C = [ 1 0 0 0;
-      % 0 0 0 0;
       0 0 1 0 ];
-      % 0 0 0 0 ];
 
 % observability check
 observecheck;
+
+% observer switch
+use_state_estimates = 0;
   
 % full-order luenberger observer
 % gain L
-lamda5 = -63;
-lamda6 = -64;
-lamda7 = -65;
-lamda8 = -66;
+lambda5 = -64;
+lambda6 = -65;
+lambda7 = -66;
+lambda8 = -67;
 
-observeDE = [ lamda5 lamda6 lamda7 lamda8 ];
+observeDE = [ lambda5 lambda6 lambda7 lambda8 ];
 Lnormal = place(A', C', observeDE)';
 
-L = Lnormal;
+% kalman filter
+% augment system with disturbances and noise
+% disturbances covariance
+Vd = 1 * eye(4);
+% measurement noise covariance
+Vn = eye(size(C,1)) * 0.1;
+% Vn = 1 * 0.0001;
+% augment input with disturbance and noise
+BF = [B Vd 0*B];
+
+% build kalman filter
+% [L,P,E] = lqe(A,G,C,Q,R,N)
+[Lkalman,P,E] = lqe(A,Vd,C,Vd,Vn);
+% DF = [0 0 0 0 0 Vn];
+% DF = [ DF;
+%        DF ];
+% sysC = ss(A, BF, C, DF);
+
+%  [KEST,L2,P2] = kalman(sysC,Vd,Vn,0);
+
+% Lnormal or Lkalman or L2
+L = Lkalman;
+
 
 x_bar_obs = [x_bar(1); x_bar(3)];
+
+% simulink model and ode solver parameters
+h = 0.01;
+stoptime = 30;
 
 % simulation and plotting
 simandplot;
