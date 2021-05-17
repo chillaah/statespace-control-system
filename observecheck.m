@@ -1,8 +1,8 @@
 %% EGH445 Observability Check
 
-Osc = obsv(A, C);
+Oac = obsv(A, C);
 
-if (rank(Osc) == size(A, 2))
+if (rank(Oac) == size(A, 2))
     
     fprintf('Equilibrium Point "%s" is Completely Observable \n', EP);
     

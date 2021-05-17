@@ -5,4 +5,4 @@ M = 1.3608; % mass of TO
 m = 0.096; % mass of RA
 J = 0.0002175; % applied intertia
 k = 186.3; % spring constant
-L = 1; % distance from RA axis
+l = 1; % distance from RA axis

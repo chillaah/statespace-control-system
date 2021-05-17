@@ -3,18 +3,18 @@
 % EPa has the dynamics which has most influence on TORA displacement
 if EP == "a"
     
-    ALPHAa = m*k*L*cos(xa_bar(1)) / ((J + m*L^2)*(m + M) - m^2*L^2*cos(xa_bar(1))^2);
+    ALPHAa = m*k*l*cos(xa_bar(1)) / ((J + m*l^2)*(m + M) - m^2*l^2*cos(xa_bar(1))^2);
     
-    BETAa = -k*(J + m*L^2) / ((J + m*L^2)*(m + M) - m^2*L^2*cos(xa_bar(1))^2);
+    BETAa = -k*(J + m*l^2) / ((J + m*l^2)*(m + M) - m^2*l^2*cos(xa_bar(1))^2);
     
     A = [ 0 1      0 0;
           0 0 ALPHAa 0;
           0 0      0 1;
           0 0  BETAa 0 ];
     
-    GAMMAa = (m + M) / ((J + m*L^2)*(m + M) - m^2*L^2*cos(xa_bar(1))^2);
+    GAMMAa = (m + M) / ((J + m*l^2)*(m + M) - m^2*l^2*cos(xa_bar(1))^2);
     
-    ETAa = -m*L*cos(xa_bar(1)) / ((J + m*L^2)*(m + M) - m^2*L^2*cos(xa_bar(1))^2);
+    ETAa = -m*l*cos(xa_bar(1)) / ((J + m*l^2)*(m + M) - m^2*l^2*cos(xa_bar(1))^2);
     
     B = [     0;
          GAMMAa;
@@ -37,18 +37,18 @@ if EP == "a"
 % EPb has the dynamics which has least influence on TORA displacement
 elseif EP == "b"
     
-    ALPHAb = m*k*L*cos(xb_bar(1)) / ((J + m*L^2)*(m + M) - m^2*L^2*cos(xb_bar(1))^2);
+    ALPHAb = m*k*l*cos(xb_bar(1)) / ((J + m*l^2)*(m + M) - m^2*l^2*cos(xb_bar(1))^2);
     
-    BETAb = -k*(J + m*L^2) / ((J + m*L^2)*(m + M) - m^2*L^2*cos(xb_bar(1))^2);
+    BETAb = -k*(J + m*l^2) / ((J + m*l^2)*(m + M) - m^2*l^2*cos(xb_bar(1))^2);
     
     A = [ 0 1      0 0;
           0 0 ALPHAb 0;
           0 0      0 1;
           0 0  BETAb 0 ];
     
-    GAMMAb = (m + M) / ((J + m*L^2)*(m + M) - m^2*L^2*cos(xb_bar(1))^2);
+    GAMMAb = (m + M) / ((J + m*l^2)*(m + M) - m^2*l^2*cos(xb_bar(1))^2);
     
-    ETAb = -m*L*cos(xb_bar(1)) / ((J + m*L^2)*(m + M) - m^2*L^2*cos(xb_bar(1))^2);
+    ETAb = -m*l*cos(xb_bar(1)) / ((J + m*l^2)*(m + M) - m^2*l^2*cos(xb_bar(1))^2);
     
     B = [     0;
          GAMMAb;

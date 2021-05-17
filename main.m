@@ -30,9 +30,9 @@ controller_enabled = 1;
 % dominant pole theory!
 % designing for overshoot 3% and settling time 1s
 % overshoot(%)
-PO = 5;
+PO = 3;
 % settling time
-Ts = 5;
+Ts = 3;
 % non-dominant (fast poles) distances from dominant (slow poles)
 % if ndpl1 ~= ndpl2 -> 'place' will be used
 ndpl1 = 10;
@@ -60,40 +60,32 @@ K = Knormal;
 newsys = (A - B*K);
 CLpoles = eig(newsys);
 
-% simulink model and ode solver parameters
-h = 0.02; 
-stoptime = 10;
-
-NL = sim('TORANonlinear', 'Solver', 'ode4', 'FixedStep', 'h', 'StopTime', 'stoptime');
-L = sim('TORALinearized', 'Solver', 'ode4', 'FixedStep', 'h', 'StopTime', 'stoptime');
-figure();
-NL_data = [NL.x, NL.T];
-L_data = [L.x, L.T];
-labels = {'x_1 [rad]', 'x_2 [rad/s]', 'x_3 [m]', 'x_4 [m/s]', 'T [N*m]'};
-titles = {'Rotational Actuator''s Angle',...
-          'Rotational Actuator''s Angular Velocity',...
-          'Translational Oscillator''s Position',...
-          'Translational Oscillator''s Linear Velocity',...
-          'Input Torque'};
-
-if EP == "a"
-    sgtitle('Design Using Linearisation about Equilibrium Point : A');
-else
-    sgtitle('Design Using Linearisation about Equilibrium Point : B');
-end
-
-for ii = 1:5 
-    subplot(5,1,ii);
-    plot(NL.t, NL_data(:,ii), 'b', L.t, L_data(:,ii), 'r--', 'LineWidth', 2);
-    grid on
-    box on
-    xlabel('time [s]', 'FontSize', 15);
-    ylabel(labels{ii});
-    title(titles{ii}, 'FontSize', 15);
-    legend('Non-Linear', 'Linearized', 'FontSize', 15,'Location', 'best');
-end
-
 % Cart_Pendulum_Animation(NL.t,NL.x1,NL.x2,x_bar(1),x_bar(2))
+
+% RA Angular Velocity & TO Linear Velocity cannot be observed
+% Assigning output vector to RA Angle & TO Position
+C = [ 1 0 0 0;
+      % 0 0 0 0;
+      0 0 1 0 ];
+      % 0 0 0 0 ];
+
 % observability check
 observecheck;
+  
+% full-order luenberger observer
+% gain L
+lamda5 = -63;
+lamda6 = -64;
+lamda7 = -65;
+lamda8 = -66;
+
+observeDE = [ lamda5 lamda6 lamda7 lamda8 ];
+Lnormal = place(A', C', observeDE)';
+
+L = Lnormal;
+
+x_bar_obs = [x_bar(1); x_bar(3)];
+
+% simulation and plotting
+simandplot;
 
