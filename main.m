@@ -57,7 +57,7 @@ klqr;
 
 % state feedback controller : u = -K * x(t)
 % either Knormal or Klqr
-K = Knormal;
+K = Klqr;
 
 % closed loop system with controller
 newsys = (A - B*K);

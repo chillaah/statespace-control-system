@@ -57,7 +57,7 @@ klqr;
 
 % state feedback controller : u = -K * x(t)
 % either Knormal or Klqr
-K = Knormal;
+K = Klqr;
 
 % closed loop system with controller
 newsys = (A - B*K);
@@ -89,27 +89,31 @@ Lnormal = place(A', C', observeDE)';
 % kalman filter
 % augment system with disturbances and noise
 % disturbances covariance
-Vd = 0.01 * eye(4);
-% noise covariance
-Vn = eye(size(C,1)) * 0.0000001;
-
+Vd = 1 * eye(4);
+% measurement noise covariance
+Vn = eye(size(C,1)) * 0.1;
+% Vn = 1 * 0.0001;
 % augment input with disturbance and noise
-% BF = [B Vd 0*B];
+BF = [B Vd 0*B];
 
 % build kalman filter
 % [L,P,E] = lqe(A,G,C,Q,R,N)
-% [Lkalman,P,E] = lqe(A,Vd,C,Vd,Vn);
-SYS = ss(
-[KEST,L,P] = kalman(SYS,Vd,Vn,0);
+[Lkalman,P,E] = lqe(A,Vd,C,Vd,Vn);
+% DF = [0 0 0 0 0 Vn];
+% DF = [ DF;
+%        DF ];
+% sysC = ss(A, BF, C, DF);
 
-% Lnormal or Lkalman
+%  [KEST,L2,P2] = kalman(sysC,Vd,Vn,0);
+
+% Lnormal or Lkalman or L2
 L = Lkalman;
 
 
 x_bar_obs = [x_bar(1); x_bar(3)];
 
 % simulink model and ode solver parameters
-h = 0.01; 
+h = 0.01;
 stoptime = 30;
 
 % simulation and plotting
