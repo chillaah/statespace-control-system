@@ -1,0 +1,82 @@
+%% EGH445 Written Report Assignment
+close all; clear; clc
+
+% get initial values
+initialise;
+
+% equilibrium points
+equilibrium;
+
+% get associated equilibrium points' linearized system dynamics
+% infinite EP's while x3 = position = 0, therefore
+% EPa - RA angle which has most influence on TORA displacement
+% EPb - RA angle which has least influence on TORA displacement
+EP = "a";
+epsysdyn;
+
+% stability check
+stabilitycheck;
+
+% controllability check
+controlcheck;
+
+% control switch
+controller_enabled = 1;
+
+% for equilibrium point "a"
+% from the 4 poles, designing for 2 poles
+% so that is it a 2nd order system
+% making 2 poles to be more than 5x far away
+% dominant pole theory!
+% designing for overshoot 3% and settling time 1s
+% overshoot
+PO = 1;
+% settling time
+Ts = 3;
+% non dominant (fast pole) distance from dominant (slow poles)
+% if ndpl1 ~= ndpl2 -> 'place' will be used
+ndpl1 = 10;
+ndpl2 = 10;
+
+% normal controller gains 'K'
+knormal;
+
+% lqr controller gains 'K'
+
+
+% state feedback controller
+K = Knormal;
+
+newsys = (A - B*K);
+CLpoles = eig(newsys);
+
+h = 0.02; 
+stoptime = 10;
+
+NL = sim('TORANonlinear', 'Solver', 'ode4', 'FixedStep', 'h', 'StopTime', 'stoptime');
+L = sim('TORALinearized', 'Solver', 'ode4', 'FixedStep', 'h', 'StopTime', 'stoptime');
+figure();
+NL_data = [NL.x, NL.T];
+L_data = [L.x, L.T];
+labels = {'x_1 [rad]', 'x_2 [rad/s]', 'x_3 [m]', 'x_4 [m/s]', 'T [N*m]'};
+titles = {'Rotational Actuator''s Angle',...
+          'Rotational Actuator''s Angular Velocity',...
+          'Translational Oscillator''s Position',...
+          'Translational Oscillator Linear Velocity',...
+          'Input Torque'};
+sgtitle(strcat('Design Using Linearisation about Equilibrium Point : ', EP));
+for ii = 1:5 
+    subplot(5,1,ii);
+    plot(NL.t, NL_data(:,ii), 'b', L.t, L_data(:,ii), 'r--', 'LineWidth', 1);
+    grid on
+    box on
+    xlabel('time [s]');
+    ylabel(labels{ii});
+    title(titles{ii});
+    legend('Non-Linear', 'Linearized');
+end
+
+% observability check
+observecheck;
+
+% Cart_Pendulum_Animation(NL.t,NL.x1,NL.x2,x_bar(1),x_bar(2))
