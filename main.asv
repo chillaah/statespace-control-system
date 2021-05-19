@@ -49,7 +49,7 @@ Qs1 = 1e3/1e3; % RA Angle
 Qs2 = 1e2/1e3; % RA Angular Velocity
 Qs3 = 1e6/1e3; % TO Position
 Qs4 = 1e4/1e3; % TO Linear Velocity
-Ru = 1e1*7.5/1e3; % Input Torque
+Ru = 1/1e3; % Input Torque
 
 % linear quadratic controller gains 'K'
 % outputs control gains Klqr

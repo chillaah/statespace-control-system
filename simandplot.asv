@@ -25,9 +25,9 @@ end
 
 for ii = 1:4 
     subplot(5,1,ii);
-    plot(NL.t,r2d(ii)*NL.x(:,ii),'b-',... % ,NL.t,r2d(ii)*NL.x_hat(:,ii),...
-         Lin.t,r2d(ii)*Lin.x(:,ii),'r--',... % , Lin.t,r2d(ii)*Lin.x_hat(:,ii),...
-         'LineWidth', 1);
+    plot(NL.t,r2d(ii)*NL.x(:,ii),'b-',NL.t,r2d(ii)*NL.x_hat(:,ii),...
+         Lin.t,r2d(ii)*Lin.x(:,ii),'r--');% , Lin.t,r2d(ii)*Lin.x_hat(:,ii),...
+         % 'LineWidth', 1);
     grid on
     box on
     xlabel('time [s]', 'FontSize', 15);
@@ -47,5 +47,4 @@ grid on
 box on
 xlabel('time [s]', 'FontSize', 15);
 ylabel(labels{5}, 'FontSize', 15);
-title('Input Torque', 'FontSize', 15);
 legend('T Nonlinear','T Linearised', 'FontSize', 15, 'Location', 'east');

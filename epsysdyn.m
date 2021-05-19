@@ -28,7 +28,7 @@ if EP == "a"
 
     D = zeros(size(C, 1), size(B, 2));
     
-    x0 = [ 20*pi/180; 0; 0.2; 0 ];
+    x0 = [ 20*pi/180; 0; 0.1; 0 ];
     
     x_bar = xa_bar;
     
