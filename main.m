@@ -55,6 +55,9 @@ Ru = 1; % Input Torque
 % outputs control gains Klqr
 klqr;
 
+% mpc
+% mpcDesigner;
+
 % state feedback controller : u = -K * x(t)
 % either Knormal or Klqr
 K = Klqr;
@@ -70,11 +73,19 @@ CLpoles = eig(newsys);
 C = [ 1 0 0 0;
       0 0 1 0 ];
 
+D = zeros(size(C, 1), size(B, 2));
+
+% kalman filter covariance matrices
+% disturbance covariance
+Q = diag([2*1 16*1 16*1 16*1]);
+% measurement noise covariance
+R = diag([0.01*1 0.01*1]);
+
 % observability check
 observecheck;
-
+% 
 % observer switch
-use_state_estimates = 0;
+use_state_estimates = 1;
   
 % full-order luenberger observer
 % gain L
@@ -85,36 +96,36 @@ lambda8 = -67;
 
 observeDE = [ lambda5 lambda6 lambda7 lambda8 ];
 Lnormal = place(A', C', observeDE)';
-
-% kalman filter
-% augment system with disturbances and noise
-% disturbances covariance
-Vd = 1 * eye(4);
-% measurement noise covariance
-Vn = eye(size(C,1)) * 0.1;
-% Vn = 1 * 0.0001;
-% augment input with disturbance and noise
-BF = [B Vd 0*B];
-
-% build kalman filter
-% [L,P,E] = lqe(A,G,C,Q,R,N)
-[Lkalman,P,E] = lqe(A,Vd,C,Vd,Vn);
-% DF = [0 0 0 0 0 Vn];
-% DF = [ DF;
-%        DF ];
-% sysC = ss(A, BF, C, DF);
-
-%  [KEST,L2,P2] = kalman(sysC,Vd,Vn,0);
-
+% 
+% % kalman filter
+% % augment system with disturbances and noise
+% % disturbances covariance
+% Vd = 1 * eye(4);
+% % measurement noise covariance
+% Vn = eye(size(C,1)) * 0.1;
+% % Vn = 1 * 0.0001;
+% % augment input with disturbance and noise
+% BF = [B Vd 0*B];
+% 
+% % build kalman filter
+% % [L,P,E] = lqe(A,G,C,Q,R,N)
+% [Lkalman,P,E] = lqe(A,Vd,C,Vd,Vn);
+% % DF = [0 0 0 0 0 Vn];
+% % DF = [ DF;
+% %        DF ];
+% % sysC = ss(A, BF, C, DF);
+% 
+% %  [KEST,L2,P2] = kalman(sysC,Vd,Vn,0);
+% 
 % Lnormal or Lkalman or L2
-L = Lkalman;
+L = Lnormal;
 
 
 x_bar_obs = [x_bar(1); x_bar(3)];
 
 % simulink model and ode solver parameters
 h = 0.01;
-stoptime = 30;
+stoptime = 5;
 
 % simulation and plotting
 simandplot;

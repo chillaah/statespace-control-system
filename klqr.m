@@ -4,17 +4,17 @@
 SYS = ss(A, B, C, D);
 
 % state and control input covariance matrices Q & R
-Q = eye(length(x_bar));
+Qcon = eye(length(x_bar));
 
 % penalising states
-Q(1,1) = Qs1 * Q(1,1);
-Q(2,2) = Qs2 * Q(2,2);
-Q(3,3) = Qs3 * Q(3,3);
-Q(4,4) = Qs4 * Q(4,4);
+Qcon(1,1) = Qs1 * Qcon(1,1);
+Qcon(2,2) = Qs2 * Qcon(2,2);
+Qcon(3,3) = Qs3 * Qcon(3,3);
+Qcon(4,4) = Qs4 * Qcon(4,4);
 
 % penalising control input
-R = Ru * eye(size(u));
+Rcon = Ru * eye(size(u));
 N = 0;
 
 % lqr
-[Klqr, S, CLP] = lqr(SYS, Q, R, N);
+[Klqr, S, CLP] = lqr(SYS, Qcon, Rcon, N);
