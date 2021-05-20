@@ -1,6 +1,5 @@
 %% EGH445 Written Report Assignment
 close all; clear; clc
-format bank;
 
 % get initial values
 initialise;
@@ -31,7 +30,7 @@ controller_enabled = 1;
 % dominant pole theory!
 % designing for overshoot 3% and settling time 1s
 % overshoot(%)
-PO = 2.5;
+PO = 3;
 % settling time
 Ts = 2;
 % non-dominant (fast poles) distances from dominant (slow poles)
@@ -45,14 +44,20 @@ knormal;
 
 % lqr controller gains 'K'
 % penalising states and control input
-Qs1 = 1e3/1e3; % RA Angle
-Qs2 = 1e2/1e3; % RA Angular Velocity
-Qs3 = 1e6/1e3; % TO Position
-Qs4 = 1e4/1e3; % TO Linear Velocity
-Ru = 1e1*7.5/1e3; % Input Torque
+Qs1 = 1e3*0.25/1e3; % RA Angle
+Qs2 = 1e2*0.25/1e3; % RA Angular Velocity
+Qs3 = 1e6*0.25/1e3; % TO Position
+Qs4 = 1e4*0.75/1e3; % TO Linear Velocity
+Ru = 1e1/1e3; % Input Torque
+
+% cross functions
+Nin1 = 1e3/1e3*0;
+Nin2 = 1e3/1e3*0;
+Nin3 = 1e3/1e3*0;
+Nin4 = 1e2/1e3*0;
 
 % linear quadratic controller gains 'K'
-% outputs control gains Klqr
+% outputs control gains Klqr2
 klqr;
 
 % mpc
@@ -66,6 +71,16 @@ K = Klqr;
 newsys = (A - B*K);
 CLpoles = eig(newsys);
 
+% non-zero set point regulation
+[NUM, DEN] = ss2tf(A,B,C,D);
+H1 = tf(NUM(1,:), DEN);
+H2 = tf(NUM(2,:), DEN);
+H3 = tf(NUM(3,:), DEN);
+H4 = tf(NUM(4,:), DEN);
+syms s
+subs(H2,s,0)
+setpoint = [ -20*pi/180; 0; -0.1; 0 ];
+
 % Cart_Pendulum_Animation(NL.t,NL.x1,NL.x2,x_bar(1),x_bar(2))
 
 % RA Angular Velocity & TO Linear Velocity cannot be observed
@@ -77,7 +92,7 @@ D = zeros(size(C, 1), size(B, 2));
 
 % kalman filter covariance matrices
 % disturbance covariance
-Q = diag([2*1 16*1 16*1 16*1]);
+Q = diag([500*1 500*1 500*1 500*1]);
 % measurement noise covariance
 R = diag([0.01*1 0.01*1]);
 

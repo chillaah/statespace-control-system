@@ -14,8 +14,11 @@ Qcon(4,4) = Qs4 * Qcon(4,4);
 
 % penalising control input
 Rcon = Ru * eye(size(u));
-
-Ncon = [Nin1, Nin2, Nin3, Nin4]';
+Nin1 = 1;
+Nin2 = 1;
+Nin3 = 1;
+Nin4 = 1;
+Ncon = [Nin1, Nin2, Nin3, Nin4]/1e3';
 
 % lqr
-[Klqr, S, CLP] = lqr(SYS, Qcon, Rcon, Ncon);
+[Klqr, S, CLP] = lqr(SYS, Qcon, Rcon, N);
