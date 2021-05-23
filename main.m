@@ -1,6 +1,6 @@
 %% EGH445 Written Report Assignment
 close all; clear; clc
-
+format bank
 % get initial values
 initialise;
 
@@ -72,68 +72,101 @@ newsys = (A - B*K);
 CLpoles = eig(newsys);
 
 % non-zero set point regulation
-[NUM, DEN] = ss2tf(A,B,C,D);
-H1 = tf(NUM(1,:), DEN);
-H2 = tf(NUM(2,:), DEN);
-H3 = tf(NUM(3,:), DEN);
-H4 = tf(NUM(4,:), DEN);
-syms s
-subs(H2,s,0)
-setpoint = [ -20*pi/180; 0; -0.1; 0 ];
+% [NUM, DEN] = ss2tf(A,B,C,D);
+% H1 = tf(NUM(1,:), DEN);
+% H2 = tf(NUM(2,:), DEN);
+% H3 = tf(NUM(3,:), DEN);
+% H4 = tf(NUM(4,:), DEN);
+% sys_syms = poly2sym(cell2mat(NUM),s)/poly2sym(cell2mat(DEN),s);
+% setpoint = [ -20*pi/180; 0; -0.1; 0 ];
+% syms s
+% invmat = [ s -1       0  0;
+%            0  s -136.57  0;
+%            0  0       s -1;
+%            0  0  136.88  s ];
+% INV = inv(invmat);
+% result = C.*INV.*B;
 
 % Cart_Pendulum_Animation(NL.t,NL.x1,NL.x2,x_bar(1),x_bar(2))
 
 % RA Angular Velocity & TO Linear Velocity cannot be observed
 % Assigning output matrix to be only RA Angle & TO Position
-C = [ 1 0 0 0;
-      0 0 1 0 ];
+Cnew = [ 1 0 0 0;
+         0 0 1 0 ];
 
-D = zeros(size(C, 1), size(B, 2));
+Dnew = zeros(size(Cnew, 1), size(B, 2));
 
 % kalman filter covariance matrices
 % disturbance covariance
-Q = diag([500*1 500*1 500*1 500*1]);
-% measurement noise covariance
-R = diag([0.01*1 0.01*1]);
+% Q = diag([500*1 500*1 500*1 500*1]);
+% % measurement noise covariance
+% R = diag([0.01*1 0.01*1]);
 
 % observability check
 observecheck;
 % 
 % observer switch
-use_state_estimates = 0;
+use_state_estimates = 1;
   
 % full-order luenberger observer
 % gain L
-lambda5 = -64;
-lambda6 = -65;
-lambda7 = -66;
-lambda8 = -67;
-
-observeDE = [ lambda5 lambda6 lambda7 lambda8 ];
-Lnormal = place(A', C', observeDE)';
+% lambda5 = -64;
+% lambda6 = -65;
+% lambda7 = -66;
+% lambda8 = -67;
+% 
+% observeDE = [ lambda5 lambda6 lambda7 lambda8 ];
+% Lnormal = place(A', Cnew', observeDE)';
 % 
 % % kalman filter
 % % augment system with disturbances and noise
-% % disturbances covariance
-% Vd = 1 * eye(4);
-% % measurement noise covariance
-% Vn = eye(size(C,1)) * 0.1;
-% % Vn = 1 * 0.0001;
+% disturbances covariance
+% Vd = 15 * eye(4);
+% measurement noise covariance
+% Vn = eye(size(Cnew,1)) * 0.1;
+% Vn = 1 * 0.0001;
 % % augment input with disturbance and noise
 % BF = [B Vd 0*B];
 % 
 % % build kalman filter
 % % [L,P,E] = lqe(A,G,C,Q,R,N)
-% [Lkalman,P,E] = lqe(A,Vd,C,Vd,Vn);
-% % DF = [0 0 0 0 0 Vn];
-% % DF = [ DF;
-% %        DF ];
-% % sysC = ss(A, BF, C, DF);
+% [Lkalman,P,E] = lqe(A,Vd,Cnew,Vd,Vn);
+% DF = [zeros(2,1) zeros(2,1) zeros(2,1) zeros(2,1) Vn];
+% DF = [ DF;
+%        DF ];
+% sysC = ss(A, BF, C, DF);
 % 
-% %  [KEST,L2,P2] = kalman(sysC,Vd,Vn,0);
+% sysC = ss(A, B, Cnew, Dnew);
+% [KEST,L2,P2] = kalman(sysC,Vd,Vn,0);
+% G = ones(size(B,1),4) *  0;
+% H = ones(size(Cnew,1)) * 0;
+% sysL = ss(A, [B G 0*B], Cnew, [Dnew Dnew Dnew Dnew H]);
 % 
+% Q = eye(4) * 1e6;
+% R = eye(2);
+% N = zeros(size(Q,1), size(R,2));
+
+% Q(1,1) = Q(1,1) * 1;
+% Q(2,2) = Q(3,3) * 1;
+% 
+% R(1,1) = R(1,1) * 1;
+% R(2,2) = R(2,2) * 1;
+% R = diag([Rcon Rcon])*100;
+% [Lval,P,E] = lqe(A,zeros(size(A,1)),Cnew,Q,R,N);
+% [KEST,L2,P2] = kalman(sysL, Q, R, N);
+% 
+% N = zeros(size(Q,1),size(R,2));
+% [Lsomething, P, E] = lqe(A, Q, Cnew, Q, R, N);
 % Lnormal or Lkalman or L2
-L = Lnormal;
+% Lkalman = place(A', Cnew', [-100.27, -98.31, -2.21, -1.00 ])';
+G = eye(4);
+H = zeros(2,2);
+Qcov = diag(500 * ones(1,4));
+Rcov = diag(0.01 * ones(1,2));
+N = 0;
+sys_kf = ss(A, [B G], Cnew, [Dnew Dnew Dnew H]);
+[kest,Lkalman,P] = kalman(sys_kf,Qcov,Rcov,N);
+L = Lkalman;
 
 x_bar_obs = [x_bar(1); x_bar(3)];
 
@@ -142,5 +175,5 @@ h = 0.01;
 stoptime = 5;
 
 % simulation and plotting
-simandplot;
-
+% simandplot;
+simandplotdefault;

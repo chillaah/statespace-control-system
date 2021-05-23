@@ -21,7 +21,7 @@ lc=0.06;                                            % Cart length
 hc=0.04;                                            % Cart height
 xp1plane=0.5;                                       % 
 xp2plane=-0.5;           
-yp1plane=-1.5*hc;
+yp1plane=-1.5*hc;                     
 
 %% Compute cartesian coordinates of the cart and pendulum
 
@@ -62,9 +62,6 @@ xplane = [xp2plane xp1plane];
 yplane = [yp1plane yp1plane];
 area(xplane,yplane,'basevalue',-hc,'facecolor',[0.5 .5 0.5]);
 
-area(-xplane,-yplane,'basevalue',0,'facecolor',[0.5 .5 0.5]);
-
-area([0, 0],[0, 0],'basevalue',-hc/2,'facecolor',[1 1 1]);
 
 %% Initial position of the cart and pendulum
 
@@ -86,8 +83,6 @@ area([xp2i;xp1i],[yp1i;yp1i],'basevalue',-hc,'facecolor','w','LineStyle','--');
 
 plot(qa(1)+lc*2/3,-hc,'Marker','o','MarkerEdgeColor','k','MarkerFaceColor','w','MarkerSize',30);
 plot(qa(1)-lc*2/3,-hc,'Marker','o','MarkerEdgeColor','k','MarkerFaceColor','w','MarkerSize',30);
-plot(qa(k)+lc*2/3,0,'Marker','o','MarkerEdgeColor','k','MarkerFaceColor',[0 0 0],'MarkerSize',30);
-plot(qa(k)-lc*2/3,0,'Marker','o','MarkerEdgeColor','k','MarkerFaceColor',[0 0 0],'MarkerSize',30);
 
 %% Reference position of the cart and pendulum
 
@@ -110,8 +105,7 @@ area([xp2r;xp1r],[yp1r;yp1r],'basevalue',-hc,'EdgeColor',[0 .7 0],'facecolor','w
 
 plot(lc*2/3+qar,-hc,'Marker','o','MarkerEdgeColor',[0 .7 0],'MarkerFaceColor','w','MarkerSize',30);
 plot(-lc*2/3+qar,-hc,'Marker','o','MarkerEdgeColor',[0 .7 0],'MarkerFaceColor','w','MarkerSize',30);
-plot(qa(k)+lc*2/3,0,'Marker','o','MarkerEdgeColor','k','MarkerFaceColor',[0 0 0],'MarkerSize',30);
-plot(qa(k)-lc*2/3,0,'Marker','o','MarkerEdgeColor','k','MarkerFaceColor',[0 0 0],'MarkerSize',30);
+
 
 %% Current position of the cart and pendulum
 
@@ -133,8 +127,6 @@ area([xp2;xp1],[yp1;yp1],'basevalue',yp2,'facecolor',[0 0 .7]);
 
 plot(qa(k)+lc*2/3,-hc,'Marker','o','MarkerEdgeColor','k','MarkerFaceColor',[0 0 0],'MarkerSize',30);
 plot(qa(k)-lc*2/3,-hc,'Marker','o','MarkerEdgeColor','k','MarkerFaceColor',[0 0 0],'MarkerSize',30);
-plot(qa(k)+lc*2/3,0,'Marker','o','MarkerEdgeColor','k','MarkerFaceColor',[0 0 0],'MarkerSize',30);
-plot(qa(k)-lc*2/3,0,'Marker','o','MarkerEdgeColor','k','MarkerFaceColor',[0 0 0],'MarkerSize',30);
 
 %% x-axis and y-axis limits
 

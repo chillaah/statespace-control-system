@@ -1,6 +1,6 @@
 %% EGH445 Observability Check
 
-Oac = obsv(A, C);
+Oac = obsv(A, Cnew);
 
 if (rank(Oac) == length(A))
     
