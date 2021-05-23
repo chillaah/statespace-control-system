@@ -8,7 +8,7 @@ NL = sim('TORANonlinear', 'Solver', 'ode4', 'FixedStep', 'h', 'StopTime', 'stopt
 % plotting
 figure();
 NL_data = [NL.x, NL.T];
-L_data = [Lin.x, Lin.T];
+Lin_data = [Lin.x, Lin.T];
 labels = {'x_1 [deg]', 'x_2 [deg/s]', 'x_3 [m]', 'x_4 [m/s]', 'T [N*m]'};
 titles = {'Rotational Actuator''s Angle',...
           'Rotational Actuator''s Angular Velocity',...

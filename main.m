@@ -72,11 +72,11 @@ newsys = (A - B*K);
 CLpoles = eig(newsys);
 
 % non-zero set point regulation
-% [NUM, DEN] = ss2tf(A,B,C,D);
-% H1 = tf(NUM(1,:), DEN);
-% H2 = tf(NUM(2,:), DEN);
-% H3 = tf(NUM(3,:), DEN);
-% H4 = tf(NUM(4,:), DEN);
+[NUM, DEN] = ss2tf(A,B,C,D,1);
+H1 = tf(NUM(1,:), DEN);
+H2 = tf(NUM(2,:), DEN);
+H3 = tf(NUM(3,:), DEN);
+H4 = tf(NUM(4,:), DEN);
 % sys_syms = poly2sym(cell2mat(NUM),s)/poly2sym(cell2mat(DEN),s);
 % setpoint = [ -20*pi/180; 0; -0.1; 0 ];
 % syms s
@@ -94,7 +94,7 @@ CLpoles = eig(newsys);
 Cnew = [ 1 0 0 0;
          0 0 1 0 ];
 
-Dnew = zeros(size(Cnew, 1), size(B, 2));
+Dnew = zeros(size(Cnew,1), size(B,2));
 
 % kalman filter covariance matrices
 % disturbance covariance
@@ -161,8 +161,13 @@ use_state_estimates = 1;
 % Lkalman = place(A', Cnew', [-100.27, -98.31, -2.21, -1.00 ])';
 G = eye(4);
 H = zeros(2,2);
-Qcov = diag(500 * ones(1,4));
-Rcov = diag(0.01 * ones(1,2));
+% H = eye(2) *  0.1;
+Qcov = diag(ones(1,4));
+Qcov(1,1) = Qcov(1,1) * 500;
+Qcov(2,2) = Qcov(2,2) * 500;
+Qcov(3,3) = Qcov(3,3) * 200;
+Qcov(4,4) = Qcov(4,4) * 800;
+Rcov = diag(0.01 * ones(1,1));
 N = 0;
 sys_kf = ss(A, [B G], Cnew, [Dnew Dnew Dnew H]);
 [kest,Lkalman,P] = kalman(sys_kf,Qcov,Rcov,N);
@@ -170,10 +175,17 @@ L = Lkalman;
 
 x_bar_obs = [x_bar(1); x_bar(3)];
 
+wholeSys = [ (A - B*K)      B*K;
+             zeros(4,4)  (A - L*Cnew) ];
+wholeSysPoles = eig(wholeSys); % they match!
+% hh = [H H;H H];
+% [NUM,DEN] = ss2tf(wholeSys, [G zeros(size(G)); hh  diag(-K*eye(4))], [Cnew Cnew], [Dnew hh(1:2,:) Dnew Dnew Dnew]); 
+
 % simulink model and ode solver parameters
 h = 0.01;
 stoptime = 5;
 
 % simulation and plotting
-% simandplot;
-simandplotdefault;
+% simandplotcontrol;
+simandplotobserve;
+% simandplotdefault;
