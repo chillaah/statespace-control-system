@@ -8,7 +8,7 @@ NL = sim('TORANonlinear', 'Solver', 'ode4', 'FixedStep', 'h', 'StopTime', 'stopt
 % plotting
 figure();
 NL_data = [NL.x, NL.T];
-L_data = [Lin.x, Lin.T];
+Lin_data = [Lin.x, Lin.T];
 labels = {'x_1 [deg]', 'x_2 [deg/s]', 'x_3 [m]', 'x_4 [m/s]', 'T [N*m]'};
 titles = {'Rotational Actuator''s Angle',...
           'Rotational Actuator''s Angular Velocity',...
@@ -49,7 +49,7 @@ plot(NL.t,r2d(1)*NL.x(:,1),'b-', NL.t,r2d(1)*NL.x_hat(:,1),'g-',...
      'LineWidth', 2);
 grid on
 box on
-% xlabel('time [s]', 'FontSize', 15, 'interpreter','latex');
+% xlabel('time [s]', 'FontSize', 20, 'interpreter','latex');
 ylabel('$x_{1} [deg]$', 'FontSize', 15, 'interpreter','latex');
 title(titles{1}, 'FontSize', 15, 'interpreter','latex');
 legend('$x_{1} Nonlinear$','$\hat{x}_{1} Nonlinear$', '$x_{1} Linearized$', '$\hat{x}_{1} Linearized$', 'FontSize', 10, 'Location', 'best', 'interpreter','latex');
@@ -66,26 +66,26 @@ ylabel('$x_{2} [deg/s]$', 'FontSize', 15, 'interpreter','latex');
 title(titles{2}, 'FontSize', 15, 'interpreter','latex');
 legend('$x_{2} Nonlinear$','$\hat{x}_{2} Nonlinear$', '$x_{2} Linearized$', '$\hat{x}_{2} Linearized$', 'FontSize', 10, 'Location', 'best', 'interpreter','latex');
 
-% anglular velocity
+% position
 subplot(5,1,3);
 plot(NL.t,r2d(3)*NL.x(:,3),'b-', NL.t,r2d(3)*NL.x_hat(:,3),'g-',...
      Lin.t,r2d(3)*Lin.x(:,3),'r--', Lin.t,r2d(3)*Lin.x_hat(:,3),'k--',...
      'LineWidth', 2);
 grid on
 box on
-% xlabel('time [s]', 'FontSize', 15, 'interpreter','latex');
+% xlabel('time [s]', 'FontSize', 20, 'interpreter','latex');
 ylabel('$x_{3} [m]$', 'FontSize', 15, 'interpreter','latex');
 title(titles{3}, 'FontSize', 15, 'interpreter','latex');
 legend('$x_{3} Nonlinear$','$\hat{x}_{3} Nonlinear$', '$x_{3} Linearized$', '$\hat{x}_{3} Linearized$', 'FontSize', 10, 'Location', 'best', 'interpreter','latex');
 
-% position
+% linear velocity
 subplot(5,1,4);
 plot(NL.t,r2d(4)*NL.x(:,4),'b-', NL.t,r2d(4)*NL.x_hat(:,4),'g-',...
      Lin.t,r2d(4)*Lin.x(:,4),'r--', Lin.t,r2d(4)*Lin.x_hat(:,4),'k--',...
      'LineWidth', 2);
 grid on
 box on
-% xlabel('time [s]', 'FontSize', 15, 'interpreter','latex');
+xlabel('time [s]', 'FontSize', 20, 'interpreter','latex');
 ylabel('$x_{4} [m/s]$', 'FontSize', 15, 'interpreter','latex');
 title(titles{4}, 'FontSize', 15, 'interpreter','latex');
 legend('$x_{4} Nonlinear$','$\hat{x}_{4} Nonlinear$', '$x_{4} Linearized$', '$\hat{x}_{4}Linearized$', 'FontSize', 10, 'Location', 'best', 'interpreter','latex');
@@ -95,7 +95,7 @@ subplot(5,1,5);
 plot(NL.t,NL.T,'b-',Lin.t,Lin.T,'r--', 'LineWidth', 2);
 grid on
 box on
-xlabel('time [s]', 'FontSize', 20, 'interpreter','latex');
+% xlabel('time [s]', 'FontSize', 20, 'interpreter','latex');
 ylabel('$\tau [N\cdot m]$', 'FontSize', 15, 'interpreter','latex');
 title('Input Torque', 'FontSize', 15, 'interpreter','latex');
 legend('$\tau Nonlinear$','$\tau Linearised$', 'FontSize', 15, 'Location', 'best', 'interpreter','latex');

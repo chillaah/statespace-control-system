@@ -8,7 +8,7 @@ NL = sim('TORANonlinear', 'Solver', 'ode4', 'FixedStep', 'h', 'StopTime', 'stopt
 % plotting
 figure();
 NL_data = [NL.x, NL.T];
-L_data = [Lin.x, Lin.T];
+Lin_data = [Lin.x, Lin.T];
 labels = {'x_1 [deg]', 'x_2 [deg/s]', 'x_3 [m]', 'x_4 [m/s]', 'T [N*m]'};
 titles = {'Rotational Actuator''s Angle',...
           'Rotational Actuator''s Angular Velocity',...
@@ -47,7 +47,7 @@ subplot(5,1,1);
 plot(NL.t,r2d(1)*NL.x(:,1),'b-', Lin.t,r2d(1)*Lin.x(:,1),'r--', 'LineWidth', 2);
 grid on
 box on
-% xlabel('time [s]', 'FontSize', 15, 'interpreter','latex');
+% xlabel('time [s]', 'FontSize', 20, 'interpreter','latex');
 ylabel('$x_{1} [deg]$', 'FontSize', 15, 'interpreter','latex');
 title(titles{1}, 'FontSize', 15, 'interpreter','latex');
 legend('$x_{1} Nonlinear$','$x_{1} Linearized$', 'FontSize', 15, 'Location', 'best', 'interpreter','latex');
@@ -62,17 +62,17 @@ ylabel('$x_{2} [deg/s]$', 'FontSize', 15, 'interpreter','latex');
 title(titles{2}, 'FontSize', 15, 'interpreter','latex');
 legend('$x_{2} Nonlinear$','$x_{2} Linearized$', 'FontSize', 15, 'Location', 'best', 'interpreter','latex');
 
-% anglular velocity
+% position
 subplot(5,1,3);
 plot(NL.t,r2d(3)*NL.x(:,3),'b-', Lin.t,r2d(3)*Lin.x(:,3),'r--', 'LineWidth', 2);
 grid on
 box on
-% xlabel('time [s]', 'FontSize', 15, 'interpreter','latex');
+% xlabel('time [s]', 'FontSize', 20, 'interpreter','latex');
 ylabel('$x_{3} [m]$', 'FontSize', 15, 'interpreter','latex');
 title(titles{3}, 'FontSize', 15, 'interpreter','latex');
 legend('$x_{3} Nonlinear$','$x_{3} Linearized$', 'FontSize', 15, 'Location', 'best', 'interpreter','latex');
 
-% position
+% linear velocity
 subplot(5,1,4);
 plot(NL.t,r2d(4)*NL.x(:,4),'b-', Lin.t,r2d(4)*Lin.x(:,4),'r--', 'LineWidth', 2);
 grid on
