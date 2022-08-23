@@ -6,5 +6,5 @@ the design of a state-feedback controller through linear quadratic regulation (L
 
 the combined system formed a linear quadratic gaussian (LQG) controller was analyzed for its performance in terms of design stability, model uncertainty compensation, disturbance rejection, and noise attenuation
 
-# TORA Sytem & LQG Controller
+# TORA System & LQG Controller
 ![TORA](Images/TORASim.png)
